@@ -1,14 +1,31 @@
 [
   {
     "name": "week",
-    "title": "This week",
-    "subtitle": "Flight School for Claude Code: what needs attention, rendered by npm run view",
+    "title": "This week at the school",
+    "subtitle": "What needs attention, the booking sheet and the fleet. Rendered by npm run view.",
     "sections": [
-      {
-        "title": "Needs attention",
-        "note": "TODO(author): point this at the industry's attention view (overdue, stuck, quiet).",
-        "sql": "select 'replace me' as item, 'TODO(author)' as why"
-      }
+      { "title": "Needs attention", "note": "Bookings with a problem, flights not graded, students gone quiet, accounts, medicals, checks.", "sql": "select kind,record,due,detail from v_attention order by due nulls last,kind,record" },
+      { "title": "Booking sheet", "sql": "select code,booked_on as day,starts,ends,kind,student,aircraft,instructor,lesson,problems from v_schedule where status='booked' and booked_on between current_date and current_date+6 order by booked_on,starts" },
+      { "title": "Fleet", "sql": "select code,type,status,hours,hours_to_check,annual_due,open_defects,deferred_defects from v_fleet order by kind,code" }
+    ]
+  },
+  {
+    "name": "training",
+    "title": "Training progress",
+    "subtitle": "Every active student against the syllabus and the flight test.",
+    "sections": [
+      { "title": "Students", "sql": "select code,name,course,instructor,lessons_done,lessons_total,next_lesson,total_hours,solo_hours,days_since as days_since_flying from v_students where status='active' order by course,lessons_done desc" },
+      { "title": "Flight test", "note": "Ready means syllabus, hours, exams, medical and account are all in place.", "sql": "select student,name,course,case when missing='' then 'ready' else missing end as still_to_do from v_test_ready order by missing<>'',student" },
+      { "title": "Instructors", "sql": "select code,name,category,hours_7d,hours_28d,students,not_graded,booked_7d from v_instructor_load order by hours_28d desc" }
+    ]
+  },
+  {
+    "name": "compliance",
+    "title": "Compliance",
+    "subtitle": "Every rule in docs/compliance.md checked against the records.",
+    "sections": [
+      { "title": "Findings", "sql": "select rule,record,issue from v_compliance order by rule,record" },
+      { "title": "Medicals and ratings", "sql": "select who,code,name,medical_expiry,medical_days,rating_expiry,rating_days from v_currency order by least(coalesce(medical_days,9999),coalesce(rating_days,9999))" }
     ]
   }
 ]

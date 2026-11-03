@@ -1,0 +1,5 @@
+First name,Last name,Role,Email,Phone,Program,Medical expiry,Status
+Kate,Lee,Student,kate.lee@example.com,021 555 0901,PPL Aeroplane,2027-03-01,Active
+Tama,Rewi,Student,tama.r@example.com,021 555 0902,PPL Aeroplane,,Active
+Grace,Hill,Instructor,grace.h@example.com,021 555 0903,,2027-06-30,Active
+Owen,Price,Renter,owen.p@example.com,021 555 0904,,,Active

@@ -1,0 +1,6 @@
+Flight ID,Date,Aircraft,Student,Instructor,Flight type,Lesson,Flight time,Landings,Cross country,Instrument time,Result,Comment
+50101,2026-09-01,ZK-FLA,Kate Lee,Grace Hill,Dual,PPL-01,1:06,1,No,,Completed,"Good first lesson, ""relaxed"" on the controls"
+50102,2026-09-08,ZK-FLA,Kate Lee,Grace Hill,Dual,PPL-02,1.0,1,No,,Completed,
+50103,2026-09-15,ZK-FLB,Kate Lee,Grace Hill,Dual,Medium turns,1.2,1,No,,Not completed,Repeat turns
+50104,2026-09-20,ZK-FLS,Tama Rewi,Grace Hill,Simulator,,1.5,0,No,1.5,,
+50105,2026-09-22,ZK-FLA,Tama Rewi,,Solo,,0.6,3,No,,,

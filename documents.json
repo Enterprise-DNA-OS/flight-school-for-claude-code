@@ -1,11 +1,37 @@
 [
   {
-    "name": "example",
-    "title": "TODO(author): the first document this industry must produce",
-    "for_each": "select gen_random_uuid() as id, 'Example' as name",
-    "file": "name",
+    "name": "training-record",
+    "title": "Student training record",
+    "for_each": "select id,code from students where status<>'withdrawn' order by code",
+    "file": "code",
     "sections": [
-      { "title": "Details", "sql": "select 'replace me' as item, $1::text as record_id" }
+      { "title": "Student", "layout": "record", "sql": "select code,name,course,instructor,started_on,medical_class,medical_expiry,total_hours,dual_hours,solo_hours,xc_solo_hours,instrument_hours,sim_hours from v_students where student_id=$1" },
+      { "title": "Syllabus", "note": "Every lesson in the course and where the student stands on it.", "sql": "select lesson,title,kind,attempts,case when competent then 'competent' when attempts>0 then 'in progress' else '' end state,competent_on from v_lesson_progress where student_id=$1 order by seq" },
+      { "title": "Flights and debriefs", "sql": "select flown_on,lesson,kind,aircraft,instructor,hours,landings,outcome,grade,debrief from v_flights where student_id=$1 order by flown_on,code" },
+      { "title": "Theory exams", "sql": "select subject,sat_on,score,pass_mark from exams where student_id=$1 order by sat_on" },
+      { "title": "Before the flight test", "note": "Check the record against the syllabus in your exposition before it is signed.", "sql": "select coalesce(nullif(missing,''),'Nothing outstanding') still_to_do from v_test_ready t join students s on s.code=t.student where s.id=$1" }
+    ]
+  },
+  {
+    "name": "statement-of-account",
+    "title": "Statement of account",
+    "for_each": "select s.id,s.code from students s where s.status<>'withdrawn' and exists (select 1 from flights f where f.student_id=s.id) order by s.code",
+    "file": "code",
+    "sections": [
+      { "title": "Account", "layout": "record", "sql": "select s.code,s.name,s.sponsor bill_to,b.charged,b.paid,b.balance from students s join v_balances b on b.student_id=s.id where s.id=$1" },
+      { "title": "Flying charged", "sql": "select flown_on,coalesce(lesson,kind) item,aircraft,instructor,hours,charge from v_flights where student_id=$1 order by flown_on,code" },
+      { "title": "Payments received", "sql": "select paid_on,ref,amount from payments where student_id=$1 order by paid_on" }
+    ]
+  },
+  {
+    "name": "aircraft-status",
+    "title": "Aircraft status sheet",
+    "for_each": "select id,code from aircraft where kind<>'simulator' order by code",
+    "file": "code",
+    "sections": [
+      { "title": "Aircraft", "layout": "record", "sql": "select code,type,status,hours,next_check_name,next_check_hours,hours_to_check,annual_due,days_to_annual from v_fleet where aircraft_id=$1" },
+      { "title": "Defects not cleared", "sql": "select code,raised_on,description,deferred,due_on from defects where aircraft_id=$1 and cleared_on is null order by raised_on" },
+      { "title": "Booked in the next 7 days", "sql": "select b.code,b.booked_on,b.starts,b.ends,b.kind,s.code student from bookings b join students s on s.id=b.student_id where b.aircraft_id=$1 and b.status='booked' and b.booked_on between current_date and current_date+7 order by b.booked_on,b.starts" }
     ]
   }
 ]

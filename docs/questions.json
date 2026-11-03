@@ -1,0 +1,12 @@
+[
+  ["Which bookings tomorrow should not go as planned, and why?", "tomorrow"],
+  ["Which students booked solo this week have a medical that has lapsed, or no dual check in the last 30 days?", "solo-check"],
+  ["Who is ready to be put forward for the flight test, and what is each other student still missing?", "test-ready"],
+  ["Which students have not flown in three weeks and have nothing booked?", "quiet"],
+  ["Which flights have no grade or debrief yet, and which instructor owes them?", "ungraded"],
+  ["Which lessons were flown before the lesson before them was signed off?", "compliance"],
+  ["Which instructors flew more instruction in a day than our limit allows?", "compliance"],
+  ["Which theory exam passes stop counting before the student is likely to sit the flight test?", "exams"],
+  ["Which aircraft reaches its next check this week at the rate it is flying?", "fleet"],
+  ["How many hours did we lose to weather, aircraft and no-shows in the last 90 days?", "cancellations"]
+]
